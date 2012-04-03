@@ -1,0 +1,1 @@
+convmv -f latin-8 -t utf8 --notest *

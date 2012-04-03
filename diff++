@@ -1,0 +1,1 @@
+nice rsync --dry-run -rivh $@

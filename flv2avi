@@ -1,0 +1,11 @@
+#!/bin/sh
+
+while [ $# -ge 1 ]; do
+inflv=$1
+outavi="${inflv}.avi"
+echo $inflv
+echo $outavi
+ffmpeg -i $inflv -ar 48000 -ac 2 $outavi.avi
+#rm "$inflv"
+shift 1
+done

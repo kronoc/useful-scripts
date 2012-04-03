@@ -1,0 +1,2 @@
+#!/bin/sh
+rsync -cvrmn $1 $2 

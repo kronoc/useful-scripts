@@ -1,0 +1,1 @@
+lsof -nl |egrep "TCP|UDP"

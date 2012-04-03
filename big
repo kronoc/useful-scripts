@@ -1,0 +1,1 @@
+find . -type f -size +20000k -exec ls -lh {} \;

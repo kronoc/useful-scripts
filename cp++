@@ -1,0 +1,1 @@
+nice rsync -rvh --size-only -progress $@

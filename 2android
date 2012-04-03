@@ -1,0 +1,9 @@
+mencoder -of lavf -lavfopts format=mp4 -vf dsize=800:480:0,scale=0:0,expand=800:480:-1::::,harddup -sws 9 -ovc x264 -x264encopts crf=24:force_cfr:bframes=0:nocabac:no8x8dct:global_header -oac faac -faacopts br=128:mpeg=4:object=2:raw -af volnorm=1 -channels 2 -srate 44100 -delay 0.3 "$1" -o "$1.mp4" $1
+
+#ffmpeg -i $1 -threads 0 -vcodec libx264 \
+#    -vpre slow_firstpass -vpre baseline -b 480k -r 13 \
+#    -acodec aac -ab 128k -sameq \
+#    -pass 1 -f rawvideo -an -y /dev/null && \
+#    ffmpeg -i $1 -threads 0 -vcodec libx264 \
+#    -vpre slow -vpre baseline -b 480k -r 13 \
+#    -acodec aac -ab 128k -ac 2 -sameq -pass 2 $1.mp4

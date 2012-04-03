@@ -1,0 +1,1 @@
+growisofs -dvd-compat -Z /dev/scd0=$1

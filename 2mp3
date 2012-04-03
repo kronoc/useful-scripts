@@ -1,0 +1,27 @@
+#!/bin/sh
+
+
+#!/bin/bash
+ENCODING="fast standard";
+while [ $# -ge 1 ]; do
+        FILE_IN="$1"
+	FILE_OUT_WAV="``mktemp``"
+        FILE_OUT="${FILE_IN}.mp3"
+	mplayer -ao pcm:waveheader:file="${FILE_OUT_WAV}" -vc null -vo null "${FILE_IN}"
+	M_EXIT=$?;
+	if [ "${M_EXIT}" == "0" ] && [ -f "${FILE_OUT_WAV}" ] && [ -s "${FILE_OUT_WAV}" ]; then
+                rm ${FILE_IN};        
+		lame --preset ${ENCODING} "${FILE_OUT_WAV}" "${FILE_OUT}";
+        	L_EXIT=$?;
+		if [ "${L_EXIT}" == "0" ] && [ -f "${FILE_OUT}" ] && [ -s "${FILE_OUT}" ]; then
+			rm ${FILE_OUT_WAV};			
+		elif [ -f "${FILE_OUT}" ]; then
+			rm ${FILE_OUT};
+			exit ${L_EXIT};
+		fi
+	elif [ -f "${FILE_OUTi_WAV}" ]; then
+                rm ${FILE_OUT_WAV};
+                exit ${M_EXIT};
+        fi
+shift 1
+done

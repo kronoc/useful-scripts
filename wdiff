@@ -1,0 +1,2 @@
+#diff <(wget -q -O - "${1}") <(wget -q -O - "${2}")
+diff -s <(eval curl -s "'${1}'") <(eval curl -s "'${2}'") | less

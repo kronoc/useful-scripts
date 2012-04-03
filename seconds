@@ -3,16 +3,11 @@
 use strict;
 use warnings;
 use Date::Parse;
-
-my $self = {
-        #time => '01:00:00',
-	@ARGV
-};
+my $self = {@ARGV};
 my $output = 0;
-if (!defined $self->{time} ){
-	die "no time param specified - enter something like time hh, time hh:mm, time hh:mm:ss";
-}
 
+my $help = "Enter something like time hh, time hh:mm, time hh:mm:ss";
+if (!defined $self->{time} ){die "No time param specified. $help";}
 
 if ($self->{time} =~ m/:/){
 	my ($ss,$mm,$hh,$day,$month,$year,$zone) = strptime($self->{time});
@@ -21,5 +16,6 @@ if ($self->{time} =~ m/:/){
 	$output = $output + ($mm*60) if (defined $mm);
 } else{
 	$output = $output + ($self->{time}*60*60)
-} 
+}
+if (($output==0) || (($self->{time} =~ tr/://)>2)){die "Invalid time format. $help"}
 print $output;

@@ -1,0 +1,18 @@
+#!/bin/bash
+RATIO="16:9";
+REPLACE=true;
+while [ $# -ge 1 ]; do
+	FILE_IN="$1"
+	FILE_OUT="${FILE_IN}.mkv"
+	ffmpeg -i ${FILE_IN} -f matroska -aspect ${RATIO} -vcodec copy -acodec copy ${FILE_OUT}
+	FF_EXIT=$?;
+	if [ "${FF_EXIT}" == "0" ] && [ -f "${FILE_OUT}" ] && [ -s "${FILE_OUT}" ]; then
+		if $REPLACE; then
+			rm ${FILE_IN}
+		fi
+	elif [ -f "${FILE_OUT}" ]; then
+		rm ${FILE_OUT};
+		exit ${FF_EXIT};
+	fi
+shift 1
+done

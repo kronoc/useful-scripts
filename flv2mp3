@@ -1,0 +1,9 @@
+#!/bin/sh
+
+while [ $# -ge 1 ]; do
+infn=$1
+outfn="${infn%%.flv}.mp3"
+ffmpeg -i "$infn" -f mp3 -vn -acodec copy "$outfn"
+shift 1
+done
+

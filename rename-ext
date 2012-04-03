@@ -1,0 +1,11 @@
+#!/bin/sh
+
+while [ $# -ge 1 ]; do
+infn=$1
+inbase=${infn%%.*}
+procfn="${inbase}.ext"
+echo $procfn
+newfn=${inbase}.new
+echo $newfn
+shift 1
+done
