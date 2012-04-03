@@ -1,0 +1,25 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+use Date::Parse;
+
+my $self = {
+        #time => '01:00:00',
+	@ARGV
+};
+my $output = 0;
+if (!defined $self->{time} ){
+	die "no time param specified - enter something like time hh, time hh:mm, time hh:mm:ss";
+}
+
+
+if ($self->{time} =~ m/:/){
+	my ($ss,$mm,$hh,$day,$month,$year,$zone) = strptime($self->{time});
+	$output = $ss if (defined $ss);
+	$output = $output + ($hh*60*60) if (defined $hh);
+	$output = $output + ($mm*60) if (defined $mm);
+} else{
+	$output = $output + ($self->{time}*60*60)
+} 
+print $output;
