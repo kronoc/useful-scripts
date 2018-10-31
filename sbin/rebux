@@ -1,0 +1,6 @@
+#REBUX_OUT=/mnt/foo/storage
+
+if bbc:
+get_iplayer $@ -O $REBUX_OUT
+else
+youtube-dl $@ -O $REBUX_OUT
