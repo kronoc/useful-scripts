@@ -1,2 +1,2 @@
 source ${HOME}/.config/transmission
-transmission-remote -n ${TR_USER}:${TR_PASSWORD} $@
+transmission-remote -n ${TR_AUTH} $@
