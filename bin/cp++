@@ -1,1 +1,1 @@
-nice rsync -rvh --size-only -progress $@
+IFS=";;;" nice rsync -rvh --size-only -progress $@

@@ -1,0 +1,19 @@
+#!/bin/bash
+trim() {
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}"
+    # remove trailing whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"   
+    echo -n "$var"
+}
+
+while [ $# -ge 1 ]; do
+	infn=$1
+	newfn=`mediainfo $1 | grep "Movie name" | cut -d":" -f2 | cut -c 2-`
+	outfn="${newfn}.mp4"
+	#echo "file in $infn"
+	echo "mv $infn \"$outfn\""
+	#fmpeg -i "$infn" -f mp3 -vn -acodec copy "$outfn"
+	shift 1
+done

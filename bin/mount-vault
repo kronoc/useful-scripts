@@ -1,0 +1,7 @@
+#!/bin/bash
+# Read Password
+read -s -p "Password:" password
+echo
+VAULT_DIR=$1
+# Run Command
+sudo mount -t ecryptfs $VAULT_DIR $VAULT_DIR -o key=passphrase,ecryptfs_cipher=aes,ecryptfs_key_bytes=16,ecryptfs_passthrough=no,ecryptfs_enable_filename_crypto=no,passphrase_passwd=$password

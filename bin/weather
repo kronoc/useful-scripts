@@ -1,2 +1,3 @@
+#curl -s "http://rss.accuweather.com/rss/liveweather_rss.asp?metric=1&locCode=EUR|IE|EI006|DUBLIN|" | sed -n '/Currently:/ s/.*: \(.*\): \([0-9]*\)\([CF]\).*/\2°\3, \1/p'
 #curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=${@:-<YOURZIPORLOCATION>}"|perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';
 curl "http://wttr.in/$1"

@@ -1,0 +1,5 @@
+#youtube-dl --sub-format srt --write-sub
+pid="$(echo $1 | cut -d= -f2)"
+title="$(youtube-dl -e $1)"
+filename="${title}-${pid}.srt"
+wget `curl "$1" | grep ".vtt" | cut -d\" -f4` -O "${filename}"
