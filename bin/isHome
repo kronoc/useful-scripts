@@ -1,7 +1,0 @@
-#if netwrk is 10.? ipconfig getifaddr en0
-work
-else if 192.168
-home
-else
-travel
-
