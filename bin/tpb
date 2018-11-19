@@ -1,2 +1,2 @@
 source ${HOME}/.config/transmission
-/usr/local/bin/torrench $@
+/usr/local/bin/torrench -t "$@"
