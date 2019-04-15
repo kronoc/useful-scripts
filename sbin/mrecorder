@@ -138,3 +138,11 @@ done;
 if [ -f "$playlist" ]; then
 	rm $playlist;
 fi;
+
+
+#cd $WORKINGDIR
+#rm -rf $FILENAME.{wav,mp3}
+#mplayer $STREAM -endpos $DURATION -vo null -ao pcm:waveheader:file=$FILENAME.wav &> /dev/null
+#lame $FILENAME.wav $FILENAME.mp3 &> /dev/null
+#rm -rf $FILENAME.wav
+
