@@ -12,8 +12,11 @@ start_from="0"
 debug=false
 shuffle=false
 log=false
-logfile="/tmp/mrecorder.log"
+logfile="/mnt/usb/tmp/mrecorder.log"
 meta_title="Live+Stream"
+
+temp_dir="/mnt/usb/tmp"
+# source ${HOME}/.config/mrecorder
 
 if ! options=$(getopt -u -n "$ME" -o t:e:s:n:p:drl -l type:,end:,start:,name:,play:,debug,rnd,log -- "$@")
 then
@@ -46,9 +49,9 @@ do
 	[[ "$PID" -ne "$THIS" ]] && kill -9 -"$PID";
 done
 
-pipe="/tmp/mrecorder.fifo"
+pipe="${temp_dir}/mrecorder.fifo"
 [[ ! -p $pipe ]] && mkfifo $pipe;
-ctrl_pipe="/tmp/mrecorder.control"
+ctrl_pipe="${temp_dir}/mrecorder.control"
 [[ ! -p $ctrl_pipe ]] && mkfifo $ctrl_pipe;
 
 if $debug ; then 
