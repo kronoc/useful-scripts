@@ -1,0 +1,140 @@
+#!/bin/bash
+
+THIS=$$;
+ME="$(basename $0)";
+#cd "$(dirname $(readlink -f $0))"
+#cd ${HOME}/playlists;
+
+play="wfmu.pls"
+play_type="live"
+end_after="24"
+start_from="0"
+debug=false
+shuffle=false
+log=false
+logfile="/tmp/mrecorder.log"
+meta_title="Live+Stream"
+
+if ! options=$(getopt -u -n "$ME" -o t:e:s:n:p:drl -l type:,end:,start:,name:,play:,debug,rnd,log -- "$@")
+then
+	exit 1
+fi
+
+set -- $options
+
+while [ $# -gt 0 ]
+do
+    case $1 in
+    -p|--play) play="$2" ; shift;;
+    -n|--name) meta_title="$2" ; shift;;
+    -t|--type) play_type="$2" ; shift;;
+    -s|--start) start_from=$(seconds time $2) ; shift;;
+    -e|--end) end_after=$2 ; shift;;
+    -d|--debug) debug=true ;;
+    -r|--rnd) shuffle=true ;;
+    -l|--log) log=true ;;
+    (--) shift; break;;
+    (-*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;;
+    (*) break;;
+    esac
+    shift
+done
+
+PIDS=$(pgrep -d" " $ME);
+for PID in $PIDS
+do
+	[[ "$PID" -ne "$THIS" ]] && kill -9 -"$PID";
+done
+
+pipe="/tmp/mrecorder.fifo"
+[[ ! -p $pipe ]] && mkfifo $pipe;
+ctrl_pipe="/tmp/mrecorder.control"
+[[ ! -p $ctrl_pipe ]] && mkfifo $ctrl_pipe;
+
+if $debug ; then 
+	echo "play:$play play_type:$play_type start_from:$start_from end_after:$end_after debug:$debug"
+	gi_quiet=""
+	verbosity="-v"; 
+
+elif $log ; then
+	gi_quiet="--quiet"
+	verbosity="-quiet -msglevel all=0 -identify ";
+else 
+	gi_quiet="--quiet"
+	verbosity="-quiet -really-quiet"; 
+fi
+
+if $shuffle; then
+	mplayer_post="-shuffle";
+else
+	mplayer_post="";
+fi
+if $log; then mplayer_post="$mplayer_post > $logfile"; fi;
+
+mplayer_bin="mplayer";
+mplayer_opts="${mplayer_bin} $verbosity -cache 4096 -cache-min 8 -ao pcm:fast:nowaveheader:file=$pipe -af resample=44100,channels=2 -vc null -vo null"
+
+start=$(date +%s);
+endpoint=$(seconds time ${end_after});
+end=$[${start}+${endpoint}];
+if $debug ; then echo "endpos $endpoint \n"; fi;
+
+#if its a podcast generate a playlist and play that
+if [[ "$play_type" == pod* ]]; then
+	limit="1";
+	if [ "$play_type" == "podcasts" ]; then limit="100"; fi;
+        playlist=$(mktemp);
+        ${HOME}/podcast2playlist url $play limit $limit > $playlist;
+        play=$playlist;
+	if $debug ; then echo "\n$playlist\n$limit\n"; fi;
+fi
+
+
+while [ "${end}" -gt "`date +%s`" ] 
+do
+	killall -9 -q ${mplayer_bin};
+        now=$(date +%s);
+	endpos=$[${end}-${now}]
+	ss=$[$start_from+${now}-${start}]
+
+	if [ $ss -lt "20" ]; then ss=0; fi;
+	#updateMetadata "${meta_title}" &	
+	case "$play_type" in
+		direct)
+			$mplayer_opts -endpos $endpos "$play" $mplayer_post
+			;;
+		archive)
+			$mplayer_opts -ss $ss -endpos $endpoint "$play" $mplayer_post
+			;;
+		infinite|mms)
+			$mplayer_opts -playlist "$play" $mplayer_post
+			;;
+		bbc-radio)
+			get_iplayer --stream --type=liveradio --pid radio:$play $gi_quiet --mode=flashaaclow --stdout --nowrite | $mplayer_opts -endpos $endpos - $mplayer_post
+			;;
+		bbc-tv) 
+			get_iplayer --stream --type=livetv --pid tv:$play $gi_quiet --mode=flashlow2 --stdout --nowrite | $mplayer_opts -endpos $endpos - $mplayer_post
+			;;
+		bbc-i*)
+			pid=$(curl -s http://www.bbc.co.uk/programmes/${play}/episodes/player.json?limit=1 | grep -Po '"episode","pid":".*?[^\\]"' | cut -d: -f2 | sed 's/.\(.*\)/\1/' | sed 's/\(.*\)./\1/')
+			if [ -z "${pid}" ]; then pid=${play}; fi
+			if [ "$play_type" == "bbc-iplayer-tv" ]; then 
+				platform="tv"; 
+			else 
+				platform="radio"; 
+			fi
+			get_iplayer --pid $platform:$pid $gi_quiet --amode=flashaaclow --stdout --nowrite | $mplayer_opts -endpos $endpos - $mplayer_post
+			;;
+		podcast)
+			$mplayer_opts -ss $ss -endpos $endpoint -playlist "$play" $mplayer_post
+			;;
+		*)
+			$mplayer_opts -endpos $endpos -playlist "$play" $mplayer_post
+			;;
+	esac
+	sleep 1
+done;
+
+if [ -f "$playlist" ]; then
+	rm $playlist;
+fi;
