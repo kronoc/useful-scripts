@@ -1,0 +1,2 @@
+screen /dev/cu.oxmantown-SerialPort 115200;
+reset;reset;
