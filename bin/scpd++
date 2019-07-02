@@ -1,0 +1,3 @@
+RSYNC_SKIP_COMPRESS=3g2/3gp/3gpp/7z/aac/ace/amr/apk/appx/appxbundle/arc/arj/asf/avi/bz2/cab/crypt5/crypt7/crypt8/deb/dmg/drc/ear/gz/flac/flv/gpg/iso/jar/jp2/jpg/jpeg/lz/lzma/lzo/m4a/m4p/m4v/mkv/msi/mov/mp3/mp4/mpeg/mpg/mpv/oga/ogg/ogv/opus/png/qt/rar/rpm/rzip/s7z/sfx/svgz/tbz/tgz/tlz/txz/vob/wim/wma/wmv/xz/z/zip
+#if exists then --append-verify -c otherwise --partial
+IFS=";;;" rsync --partial --delete --progress --skip-compress=${RSYNC_SKIP_COMPRESS} -avz -e "ssh -T -o 'Compression=no'" "$1" "$2"
