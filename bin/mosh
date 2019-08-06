@@ -1,0 +1,1 @@
+/usr/local/bin/mosh $@ --server="LANG=en_IE.UTF-8;MOSH_SERVER_NETWORK_TMOUT=604800;MOSH_SERVER_SIGNAL_TMOUT=60 mosh-server"
