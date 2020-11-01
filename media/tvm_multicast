@@ -1,1 +1,10 @@
-ffmpeg -hide_banner -loglevel warning -t 22:00:00 -re -i $(./tvm_live_stream.sh) -c copy -f rtp_mpegts  rtp://239.255.1.1:5004
+
+#!/bin/bash
+while :
+do
+	ffmpeg -hide_banner -loglevel warning -t 8:00:00 -re -i $(./tvm_live_stream.sh) -c copy -f rtp_mpegts  rtp://239.255.1.1:5004
+	sleep 10;
+	echo "resetting feed";
+done
+
+
