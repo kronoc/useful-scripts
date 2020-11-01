@@ -1,1 +1,1 @@
-ffmpeg -8 -re -i $(tvm_live_stream.sh) -c copy -f rtp_mpegts  rtp://239.255.1.1:5004
+ffmpeg -hide_banner -loglevel warning -t 22:00:00 -re -i $(./tvm_live_stream.sh) -c copy -f rtp_mpegts  rtp://239.255.1.1:5004
