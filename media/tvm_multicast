@@ -3,6 +3,9 @@
 while :
 do
 	ffmpeg -hide_banner -loglevel warning -t 8:00:00 -re -i $(./tvm_live_stream.sh) -c copy -f rtp_mpegts  rtp://239.255.1.1:5004
+#	ffmpeg -hide_banner -loglevel warning -re -t 8:00:00 -i $(./tvm_live_stream.sh) -c:v libx265 -preset fast -crf 28 -tag:v hvc1 -c:a eac3 -b:a 224k -f rtp_mpegts  rtp://239.255.1.1:5004
+
+
 	sleep 10;
 	echo "resetting feed";
 done
