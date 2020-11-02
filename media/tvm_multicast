@@ -7,7 +7,7 @@ do
 	URL="";
 	OUTPUT="rtp://239.255.1.1:5004"
 	if [ "$CHANNEL" = "tvm" ]; then
-		URL=";$(./tvm_live_stream.sh tvm)";
+		URL="$(./tvm_live_stream.sh tvm)";
 	elif [ "$CHANNEL" = "tvm2" ]; then
 		URL="$(./tvm_live_stream.sh tvm2)";
 		OUTPUT="rtp://239.255.1.2:5004"	
@@ -16,10 +16,14 @@ do
 		CHANNEL="tvm";
 	fi
 
-	ffmpeg -hide_banner -loglevel warning -t 8:00:00 -re -i "${URL}" -c copy -f rtp_mpegts ${OUTPUT}
-#	ffmpeg -hide_banner -loglevel warning -re -t 8:00:00 -i $(./tvm_live_stream.sh) -c:v libx265 -preset fast -crf 28 -tag:v hvc1 -c:a eac3 -b:a 224k -f rtp_mpegts  rtp://239.255.1.1:5004
-	sleep 10;
-	echo "resetting feed";
+	if [ "$URL" = "" ]; then
+		echo "feed inactive, pausing for 3 minutes.";
+		sleep 180;
+	else
+		ffmpeg -hide_banner -loglevel warning -t 8:00:00 -re -i "${URL}" -c copy -f rtp_mpegts ${OUTPUT}
+		echo "playlist expired, resetting feed";
+		sleep 60;
+	fi
 done
 
 

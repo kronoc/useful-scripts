@@ -23,9 +23,16 @@ cat $TMPDIR/tvm_live.html | grep iframe | grep player | cut -d'"' -f6 > $TMPDIR/
 PLAYER_ID=$(cat $TMPDIR/player_iframe_url | sed 's/.*\.mt\/\([^.html]*\).*/\1/');
 LIVE_ID=$(cat $TMPDIR/player_iframe_url | sed 's/.*live_id=\([^\&]*\).*/\1/');
 
-wget -q -O $TMPDIR/stream.json "https://media.tvm.com.mt/api/concatenate?callback=visualplatformconcat_0&format=json&playersettings_0=%2Fapi%2Fplayer%2Fsettings%3Fplayer_id%3D$PLAYER_ID%26parameters%3Dsource%253Dembed%2526live_id%253D$LIVE_ID%2526tvm_location%253D$CHANNEL&livelist_1=%2Fapi%2Flive%2Flist%3Finclude_actions_p%3D1%26source%3Dembed%26live_id%3D$LIVE_ID%26tvm_location%3D$CHANNEL%26upcoming_p%3D1%26ordering%3Dstreaming%26player_id%3D$PLAYER_ID&photolist_2=%2Fapi%2Fphoto%2Flist%3Fsize%3D10%26include_actions_p%3D1%26source%3Dembed%26live_id%3D$LIVE_ID%26tvm_location%3D$CHANNEL%26player_id%3D$PLAYER_ID";
-
-HLS_URL=$(cat $TMPDIR/stream.json | grep -m 1 "hls_url" | sed 's/.*hls_url": "\([^",]*\).*/\1/');
-rm -rf $TMPDIR;
-echo $HLS_URL;
-exit 0;
+		
+if [ "$PLAYER_ID" = "" ] || [ "$LIVE_ID" = "" ]; then
+	echo "";
+	exit 1;
+else	
+	STREAM_JSON_URL="https://media.tvm.com.mt/api/concatenate?callback=visualplatformconcat_0&format=json&playersettings_0=%2Fapi%2Fplayer%2Fsettings%3Fplayer_id%3D$PLAYER_ID%26parameters%3Dsource%253Dembed%2526live_id%253D$LIVE_ID%2526tvm_location%253D$CHANNEL&livelist_1=%2Fapi%2Flive%2Flist%3Finclude_actions_p%3D1%26source%3Dembed%26live_id%3D$LIVE_ID%26tvm_location%3D$CHANNEL%26upcoming_p%3D1%26ordering%3Dstreaming%26player_id%3D$PLAYER_ID&photolist_2=%2Fapi%2Fphoto%2Flist%3Fsize%3D10%26include_actions_p%3D1%26source%3Dembed%26live_id%3D$LIVE_ID%26tvm_location%3D$CHANNEL%26player_id%3D$PLAYER_ID";
+	#echo ${STREAM_JSON_URL}
+	wget -q -O $TMPDIR/stream.json ${STREAM_JSON_URL}
+	HLS_URL=$(cat $TMPDIR/stream.json | grep -m 1 "hls_url" | sed 's/.*hls_url": "\([^",]*\).*/\1/');
+	rm -rf $TMPDIR;
+	echo "$HLS_URL";
+	exit 0;
+fi
