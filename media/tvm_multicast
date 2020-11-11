@@ -1,5 +1,4 @@
 #!/bin/bash
-
 while :
 do
 
@@ -17,12 +16,12 @@ do
 	fi
 
 	if [ "$URL" = "" ]; then
-		echo "feed inactive, pausing for 3 minutes.";
-		sleep 180;
+		echo "feed inactive, pausing for 30 minutes.";
+		sleep 1800;
 	else
-		ffmpeg -hide_banner -loglevel warning -t 8:00:00 -re -i "${URL}" -c copy -f rtp_mpegts ${OUTPUT}
+		ffmpeg -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36" -headers "origin: https://www.tvm.com.mt" -headers "referer: https://www.tvm.com.mt" -hide_banner -loglevel warning -t 08:00:00 -re -i "${URL}" -c copy -f rtp_mpegts ${OUTPUT}
 		echo "playlist expired, resetting feed";
-		sleep 60;
+		sleep 3600;
 	fi
 done
 
