@@ -1,0 +1,1 @@
+rigctld -m 342 -r /dev/ttyUSB0 -v
