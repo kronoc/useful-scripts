@@ -1,0 +1,3 @@
+youtube-dl -f best -o - $1 | ffmpeg -re -i - -c copy -f rtp_mpegts rtp://@239.255.2.1:5004
+#ffmpeg -re -i $(youtube-dl -f 93 -g ${1}) -c copy -f rtp_mpegts rtp://@239.255.2.1:5004
+
