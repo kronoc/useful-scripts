@@ -1,0 +1,8 @@
+
+    if [ -e "curl --head http://localhost:9981/" ]; then
+    	echo ""
+    else
+        ssh -N -i ~/.ssh/mac_rsa -f home.telly
+    fi
+
+curl -s http://localhost:9981/playlist/channels | grep -i -A1 "$@" | head -n 2 | tail -n 1 | cut -d"&" -f1 | xargs open -a VLC
