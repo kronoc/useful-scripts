@@ -1,0 +1,1 @@
+rsync --delete --partial --progress --skip-compress="mp3/m4a" -avun  -e "ssh -T -o 'Compression=no'" Music/iTunes/iTunes\ Media/Music "volta.local:/mnt/storage/srv/media/audio/iTunes/iTunes Media/"
