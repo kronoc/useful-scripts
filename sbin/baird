@@ -1,5 +1,5 @@
 
-    if [ -e "curl --head http://localhost:9981/" ]; then
+   if [ -e "curl --head http://localhost:9981/" ]; then
     	echo ""
     else
         ssh -N -i ~/.ssh/mac_rsa -f home.telly
