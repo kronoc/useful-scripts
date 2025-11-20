@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+  echo "Usage: $0 <directory>"
+  exit 1
+fi
+
+directory="$1"
+
+if [[ ! -d "$directory" ]]; then
+  echo "Error: $directory is not a valid directory."
+  exit 1
+fi
+
+# Check if ffmpeg is installed
+command -v ffmpeg >/dev/null 2>&1 || {
+  echo >&2 "Error: ffmpeg is not installed. Please install ffmpeg and try again."
+  exit 1
+}
+
+# Convert webm files to m4a using ffmpeg
+for file in "$directory"/*.webm; do
+  if [[ -f "$file" ]]; then
+    filename=$(basename "$file")
+    filename="${filename%.*}"
+    output_file="$directory/$filename.m4a"
+    ffmpeg -i "$file" -vn -c:a aac -b:a 256k "$output_file"
+    echo "Converted $filename.webm to $filename.m4a"
+  fi
+done
+
+echo "Conversion completed."
+
