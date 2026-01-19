@@ -1,8 +1,12 @@
-
-   if [ -e "curl --head http://localhost:9981/" ]; then
+    if [ -e "curl -s --head http://localhost:9981/" ]; then
     	echo ""
     else
-        ssh -N -i ~/.ssh/mac_rsa -f home.telly
+        ssh -N -q -i ~/.ssh/telly_rsa -f baird.local.telly #home.telly
     fi
 
-curl -s http://localhost:9981/playlist/channels | grep -i -A1 "$@" | head -n 2 | tail -n 1 | cut -d"&" -f1 | xargs open -a VLC
+STREAM="$(curl -s http://localhost:9981/playlist/channels | grep -i -A1 "$@" | head -n 2 | tail -n 1 | cut -d"&" -f1)";
+#echo "${STREAM}";
+#mplayer -really-quiet -dr -zoom -vo fbdev2 -framedrop -fs -noborder -vf scale -y 900 -x 1600 ${STREAM} > /dev/null 2>&1;
+mplayer -really-quiet  -cache 8192 -dr -zoom -vo fbdev2 -framedrop -fs -xy 1600 "${STREAM}"  > /dev/null 2>&1;
+
+#xargs open -a VLC
