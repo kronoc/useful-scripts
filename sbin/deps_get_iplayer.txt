@@ -1,0 +1,3 @@
+apt install libwww-perl libxml-simple-perl libxml-libxml-perl libmojolicious-perl libcgi-pm-perl
+apt install ffmpeg rtmpdump atomicparsley
+apt install  libhtml-parser-perl libhttp-parser-perl
