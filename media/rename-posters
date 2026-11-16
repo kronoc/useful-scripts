@@ -1,0 +1,5 @@
+find $1 -type f -name "*-poster.jpg" | while read -r file; do
+    dir=$(dirname "$file")
+    base=$(basename "$file" "-poster.jpg")
+    mv "$file" "$dir/poster-$base.jpg"
+done

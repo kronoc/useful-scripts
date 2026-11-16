@@ -1,0 +1,1 @@
+ffmpeg -i 1\ -\ Theseus\ \&\ The\ Minotaur.avi -c:v h264_v4l2m2m -b:v 4M -c:a aac -b:a 128k 1\ -\ Theseus\ \&\ The\ Minotaur.mp4

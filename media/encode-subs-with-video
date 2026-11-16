@@ -1,0 +1,1 @@
+ffmpeg -i Spoor\ \(2017\)\ 720p\ AAC.mp4 -i Spoor\ \(2017\)\ 720p\ AAC.srt -map 0 -map 1 -c copy -metadata:s:a:0 language=pol -metadata:s:s:0 language=eng -disposition:s:0 default Spoor\ \(2017\)\ 720p\ AAC.mkv
