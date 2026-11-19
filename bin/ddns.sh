@@ -2,7 +2,7 @@
 
 # register a subdomain at https://www.duckdns.org/ to get your token
 #add to crontab:
-#30 03 * * * /home/conor/bin/ddns.sh
+#30 03 * * * /home/USER/bin/ddns.sh
 # set the following in ~/.ddns
 # export DDNS_SUBDOMAIN="duckdns.test"
 # export DDNS_TOKEN="dummy-token"
